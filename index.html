@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roulette — European Single Zero</title>
+  <meta name="description" content="A free browser roulette table: place chips on numbers, colours and outside bets, then spin a real European wheel. Play money only." />
+  <meta name="theme-color" content="#06120c" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230d6b3f' stroke='%23d8b25c' stroke-width='6'/%3E%3Ccircle cx='50' cy='50' r='18' fill='%23d8b25c'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Roulette</h1>
+        <p>European · single zero</p>
+      </div>
+
+      <div class="ledger" aria-label="Bank">
+        <div class="ledger-item">
+          <span>Cash</span>
+          <strong id="cash">$1,000</strong>
+        </div>
+        <div class="ledger-item">
+          <span>On table</span>
+          <strong id="staked">$0</strong>
+        </div>
+        <div class="ledger-item">
+          <span>Net</span>
+          <strong id="net">$0</strong>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="soundBtn" class="icon-btn" type="button" aria-pressed="true" title="Mute sound (M)" aria-label="Toggle sound">
+          <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.7a4.7 4.7 0 0 1 0 6.6"/><path d="M18.4 5.8a8.8 8.8 0 0 1 0 12.4"/></svg>
+          <svg class="icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6"/><path d="m21 9-5 6"/></svg>
+        </button>
+        <button id="resetBtn" class="icon-btn" type="button" title="Reset bankroll" aria-label="Reset bankroll">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5v5h5"/><path d="M3.6 10a8.5 8.5 0 1 1 1.8 7.4"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage" aria-label="Roulette wheel">
+        <div class="wheel-wrap">
+          <canvas id="wheel" role="img" aria-label="European roulette wheel"></canvas>
+        </div>
+
+        <div id="result" class="result" aria-live="polite"></div>
+        <p id="status" class="status">Place your bets</p>
+
+        <div id="chips" class="chips" role="radiogroup" aria-label="Chip value"></div>
+
+        <div class="actions">
+          <button id="undoBtn" class="ghost" type="button" title="Undo last chip (U)">Undo</button>
+          <button id="clearBtn" class="ghost" type="button" title="Take back all chips (C)">Clear</button>
+          <button id="rebetBtn" class="ghost" type="button" title="Repeat last bet (R)">Rebet</button>
+        </div>
+
+        <button id="spinBtn" class="spin-btn" type="button">Spin</button>
+      </section>
+
+      <div class="table-col">
+        <section class="table" aria-label="Betting table">
+          <p class="scroll-hint">Swipe the felt to see every bet →</p>
+          <div class="board-scroll">
+            <div id="board" class="board"></div>
+          </div>
+
+          <div class="table-foot">
+            <p id="hint" class="hint">Pick a chip, then click the felt. Shift-click or right-click to take chips back.</p>
+            <div class="history" aria-label="Recent results">
+              <span>Last</span>
+              <ol id="history"></ol>
+            </div>
+          </div>
+
+          <p id="stats" class="stats"></p>
+        </section>
+
+        <section class="info" aria-label="Table information">
+          <div class="info-card">
+            <h2>Payouts</h2>
+            <dl class="odds">
+              <div><dt>Straight up</dt><dd>35 : 1</dd></div>
+              <div><dt>Dozen · column</dt><dd>2 : 1</dd></div>
+              <div><dt>Red / black · odd / even · high / low</dt><dd>1 : 1</dd></div>
+            </dl>
+            <p class="note">Zero loses every outside bet.</p>
+          </div>
+
+          <div class="info-card">
+            <h2>Table controls</h2>
+            <dl class="keys">
+              <div><dt><kbd>Space</kbd></dt><dd>Spin</dd></div>
+              <div><dt><kbd>R</kbd></dt><dd>Rebet</dd></div>
+              <div><dt><kbd>C</kbd></dt><dd>Clear</dd></div>
+              <div><dt><kbd>U</kbd></dt><dd>Undo</dd></div>
+              <div><dt><kbd>M</kbd></dt><dd>Mute</dd></div>
+            </dl>
+            <p class="note">Shift-click or right-click a spot to lift chips.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="legal">
+      Play money only — no real wagering. European wheel, 37 pockets, 2.7% house edge.
+    </footer>
+  </div>
+
+  <noscript>
+    <p class="noscript">This game needs JavaScript. Please enable it and reload.</p>
+  </noscript>
+
+  <script src="js/audio.js"></script>
+  <script src="js/wheel.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
